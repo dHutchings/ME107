@@ -2,7 +2,7 @@
 
 #include <RunningAverage.h>
 
-RunningAverage spd_avg(3); //over 3 datapoints, should be ok for speed control
+RunningAverage spd_avg(5); //over 3 datapoints, should be ok for speed control
 
 
 Encoder myEnc(2, 3);
@@ -15,6 +15,8 @@ void start_encoder()
 {
   oldPosition = 0;  //start at zero
   time = micros();
+  
+  update_encoder();
 }
 
 void update_encoder()

@@ -5,6 +5,7 @@
 #define txPin 5  // pin 4 connects to smcSerial RX
 SoftwareSerial smcSerial = SoftwareSerial(rxPin, txPin);
 
+int last_cmd;
 
 
 void setup_smc()
@@ -33,6 +34,7 @@ void exitSafeStart()
 // speed should be a number from -3200 to 3200
 void setMotorSpeed(int speed)
 {
+  last_cmd = speed;
   if (speed < 0)
   {
     smcSerial.write(0x86);  // motor reverse command
@@ -42,6 +44,13 @@ void setMotorSpeed(int speed)
   {
     smcSerial.write(0x85);  // motor forward command
   }
+  
   smcSerial.write(speed & 0x1F);
   smcSerial.write(speed >> 5);
 }
+
+int pwm()
+{
+  return last_cmd;
+}
+
