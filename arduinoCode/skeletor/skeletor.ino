@@ -23,13 +23,21 @@ int pxW = 320;
 
 long timeToEval = 0;
 long timeToEncoder = 0;
+long timeToCam = 0;
+float k = .01;  //a geometry constant for the track distances - will tune later.
+
+boolean isTom = true;
+
 void setup() {
   setup_serial();
+
+  if(isTom)
+  {  
+    Serial.println("Starting Pixy...");
+    pixy_setup();
+    Serial.println("Pixy Started");
+  } 
   
-  Serial.println("Starting Pixy...");
-  pixy_setup();
-  Serial.println("Pixy Started");
- 
   Serial.println("Starting SMC");
   setup_smc();
   Serial.println("SMC Started");
@@ -49,13 +57,11 @@ void setup() {
 }
 
 
-void loop() {
+void loop() 
+{
   
   parse_input();
   
-
-  
-
   if( millis() > timeToEncoder)  //only update encoder at 100Hz
   {
     update_encoder();
@@ -66,17 +72,29 @@ void loop() {
   if( millis() > timeToEval )  //20Hz compute.
   {
     int motorSpeed = compute_pid(get_velocity() );
-    Serial.println(motorSpeed);
+    //Serial.println(motorSpeed);
     setMotorSpeed(pwm()+motorSpeed);  // full-speed forward
     timeToEval = millis()+50;
-          print_velocity();
+    print_velocity();
   
   }
 
-
-
-
-  //Serial.println("ran 1");
+  if(isTom)
+  {
+    if(millis() > timeToCam)
+    {
+      int val = 155 - xPos();
+      
+      set_setpoint(get_setpoint() + val); //(val * 50 since 50Hz camera frame)
+      
+      timeToCam = millis() + 20;
+    }
+  }
+  else
+  {
+  
+    //Serial.println("ran 1");
+  }
 
 }
 

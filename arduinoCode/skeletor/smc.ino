@@ -31,22 +31,24 @@ void exitSafeStart()
   smcSerial.write(0x83);
 }
 
-// speed should be a number from -3200 to 3200
+// speed should be a number from -3200 to 3200.  Required to be such by clamping
 void setMotorSpeed(int speed)
 {
-  last_cmd = speed;
-  if (speed < 0)
+  last_cmd = clamp(speed,-3200,3200);  //clamp to 3200 so things don't break.
+  if (last_cmd < 0)
   {
     smcSerial.write(0x86);  // motor reverse command
-    speed = -speed;  // make speed positive
+    smcSerial.write(-last_cmd & 0x1F);
+    smcSerial.write(-last_cmd >> 5);
   }
   else
   {
     smcSerial.write(0x85);  // motor forward command
+    smcSerial.write(last_cmd & 0x1F);
+    smcSerial.write(last_cmd >> 5);
+
   }
   
-  smcSerial.write(speed & 0x1F);
-  smcSerial.write(speed >> 5);
 }
 
 int pwm()
@@ -54,3 +56,20 @@ int pwm()
   return last_cmd;
 }
 
+
+int clamp_int(int in, int mn, int mx)
+{
+  if(mx < in)
+  {
+    return mx;
+  }
+  else if(mn > in)
+  {
+    return mn;
+  }
+  else
+  {
+    return in;
+  }
+  
+}

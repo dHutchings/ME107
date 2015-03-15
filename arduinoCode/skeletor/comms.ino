@@ -52,9 +52,10 @@ void parse_input()
        float set = Serial.parseFloat();
        set_setpoint(set);
     }
-    else if( (msg == 103) | (msg == 104)) //small g or h
+    else if(msg == 108) //small l
     {
-      
+       Serial.print("Location is");
+       print_position();
     }
 
 
