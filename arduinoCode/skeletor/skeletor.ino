@@ -22,7 +22,7 @@
 int pxW = 320;
 
 long timeToEval = 0;
-
+long timeToEncoder = 0;
 void setup() {
   setup_serial();
   
@@ -56,8 +56,11 @@ void loop() {
 
   
 
-
-  update_encoder();
+  if( millis() > timeToEncoder)  //only update encoder at 100Hz
+  {
+    update_encoder();
+    timeToEncoder = millis() + 10;
+  }
 
 
   if( millis() > timeToEval )  //20Hz compute.
@@ -66,10 +69,11 @@ void loop() {
     Serial.println(motorSpeed);
     setMotorSpeed(pwm()+motorSpeed);  // full-speed forward
     timeToEval = millis()+50;
-
+          print_velocity();
+  
   }
 
-      print_velocity();
+
 
 
   //Serial.println("ran 1");
