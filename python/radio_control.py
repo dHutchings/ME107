@@ -23,7 +23,7 @@ import serial
 import time
 import atexit
 
-filename = '/dev/ttyACM0'
+filename = '/dev/ttyUSB0'
 
 dev = serial.Serial(filename, 115200, timeout=0)
 
@@ -52,7 +52,7 @@ def drive_for(tim,speed):
     time.sleep(tim)
 
 
-
+print('Starting Test')
 set_pid()
 drive_for(5,'300.0')
 

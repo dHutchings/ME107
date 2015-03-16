@@ -26,7 +26,7 @@ long timeToEncoder = 0;
 long timeToCam = 0;
 float k = .01;  //a geometry constant for the track distances - will tune later.
 
-boolean isTom = true;
+boolean isTom = false;
 
 void setup() {
   setup_serial();
@@ -66,6 +66,7 @@ void loop()
   {
     update_encoder();
     timeToEncoder = millis() + 10;
+    print_position();
   }
 
 
@@ -75,7 +76,7 @@ void loop()
     //Serial.println(motorSpeed);
     setMotorSpeed(pwm()+motorSpeed);  // full-speed forward
     timeToEval = millis()+50;
-    print_velocity();
+    //print_velocity();
   
   }
 

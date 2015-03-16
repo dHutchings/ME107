@@ -15,7 +15,8 @@ mkdir ./data/$var
 
 
 #open ttyACM0at 115200, save output to a data file.
-sudo minicom -C ./data/$var/jerry.csv -b 115200 -D /dev/ttyACM0
+xterm -e minicom -C ./data/$var/jerry.csv -b 115200 -D /dev/ttyUSB0 &
 
+echo helloWorld
 
-
+python ./python/radio_control.py

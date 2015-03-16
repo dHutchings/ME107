@@ -50,7 +50,7 @@ void set_constants(double p, double i, double d)
 void set_setpoint(float st)
 {
    Setpoint = (double) clamp(st,-1000,1000);   //clamp to 1000 so the setpoint's don't go wild, mostly airbitrary numbers that can be changed later
-   Serial.println(Setpoint);
+   //Serial.println(Setpoint);
   
 }
 
