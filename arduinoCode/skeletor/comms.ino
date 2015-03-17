@@ -54,7 +54,7 @@ void parse_input()
     }
     else if(msg == 108) //small l
     {
-       Serial.print("Location is");
+       //Serial.print("Location is");
        print_position();
     }
 

@@ -66,7 +66,7 @@ void loop()
   {
     update_encoder();
     timeToEncoder = millis() + 10;
-    print_position();
+    //print_position();
   }
 
 
@@ -90,11 +90,6 @@ void loop()
       
       timeToCam = millis() + 20;
     }
-  }
-  else
-  {
-  
-    //Serial.println("ran 1");
   }
 
 }
