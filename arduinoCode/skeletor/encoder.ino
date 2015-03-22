@@ -37,6 +37,7 @@ void update_encoder()
 void print_position()
 {
   Serial.println(oldPosition);
+  Serial.print(" ");
 }
 
 void print_velocity()

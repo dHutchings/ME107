@@ -1,6 +1,6 @@
 void setup_serial()
 {
-    Serial.begin(115200);
+    Serial.begin(57600);
 }
 
 void parse_input()
