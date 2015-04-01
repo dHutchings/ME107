@@ -10,7 +10,7 @@ void parse_input()
     int msg = Serial.read();
     if(msg == 112) // small p --> Change PID CONSTANTS 
     {
-      Serial.println("Awaiting three ints, for the PID constants");
+       Serial.println("Awaiting three floats, for the PID constants");
        Serial.println("kp?");
        while(Serial.available() == 0)
        {
@@ -56,6 +56,20 @@ void parse_input()
     {
        //Serial.print("Location is");
        print_position();
+    }
+    else if(msg == 99)//small c, get camera location
+    {
+       Serial.println(xPos());
+    }
+    else if(msg == 107) //small k, change camera proportional
+    {
+       Serial.println("Awaiting one float, for the camera p constant");
+       while(Serial.available() == 0)
+       {
+         delay(1);
+       }
+       k = Serial.parseFloat();
+       Serial.println(k);
     }
 
 

@@ -40,6 +40,9 @@ def stop_motor():
     time.sleep(0.1)
     tom.write('0.0') #speed is zero.
     jerry.write('0.0')
+    tom.write('x')
+    jerry.write('x')
+    turn_pid_off(tom)
     time.sleep(1)
 
 def current_time_milli():
@@ -54,23 +57,32 @@ def set_pid(port):
     time.sleep(1.5)
     port.write('0.0')
 
+def turn_pid_off(port):
+    port.write('p')
+    time.sleep(0.1)
+    port.write('0.0')
+    time.sleep(1.5)
+    port.write('0.0')
+    time.sleep(1.5)
+    port.write('0.0')
+
 #note: doesn't set back to zero, watch out!
 def drive_for(tim,speed):
     tom.write('s')
     time.sleep(0.1)
     tom.write(speed)
-    time.sleep(1)
+    tome.write('x')
     time.sleep(tim)
 
 def drive_print(port,tim,speed):
     port.write('s')
     time.sleep(0.1)
     port.write(speed)
+    port.write('x')
     time.sleep(1) #now should be running
     timeToEnd = current_time_milli() + (1000*tim)
     while current_time_milli() < timeToEnd:
-        time_stamps.write(str(time.time()))
-        port.write('l') #get location
+        get_position_both()
         time.sleep(.05) #at 20 Hz.
 
 def drive_print_both(tim,speed):
@@ -79,7 +91,9 @@ def drive_print_both(tim,speed):
     time.sleep(0.1)
     tom.write(speed)
     jerry.write(speed)
-    time.sleep(1) #now should be running
+
+    tom.write('x')
+    jerry.write('x')  #supposedly nonfloat commands short-circuit the timeout, let's see if the cars move faster now.
     timeToEnd = current_time_milli() + (1000*tim)
     while current_time_milli() < timeToEnd:
         get_position_both()
@@ -96,7 +110,5 @@ set_pid(tom)
 set_pid(jerry)
 originalTime = time.time()
 get_position_both()
-drive_print_both(5,'300.0')
-#drive_print(jerry,3,'200.0')
-#automatically stops motor and end of test
+drive_print(jerry,5,'300.0')
 

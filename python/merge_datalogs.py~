@@ -1,0 +1,13 @@
+def merge_datalogs(file1, file2, file3, ratio):
+    tom = csv_to_list(file1)
+    jerry = csv_to_list(file2)
+    time = csv_to_list(file3)
+
+    for i in range(1,len(tom)):
+        if is_num(tom(i)) and is_num(jerry(i)):
+            out_file.append((ratio*tom(i), ratio*jerry(i), time(i))
+        end
+    end
+
+    return list_to_csv(out_file)
+end

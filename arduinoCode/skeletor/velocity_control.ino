@@ -27,7 +27,7 @@ void setup_vel_control()
   
   Setpoint = 0;  //setpoint is zero, since I want to be going at zero speed
 
-
+  set_constants(1.0,0.25,0);
 }
 
 int compute_pid(float inp)

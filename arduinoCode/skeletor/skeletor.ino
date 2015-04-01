@@ -24,7 +24,7 @@ long timeToEncoder = 0;
 long timeToCam = 0;
 float k = .01;  //a geometry constant for the track distances - will tune later.
 
-boolean isTom = false;
+boolean isTom = true;
 
 void setup() {
   setup_serial();
@@ -84,9 +84,11 @@ void loop()
     {
       int val = 155 - xPos();
       
-      set_setpoint(get_setpoint() + val); //(val * 50 since 50Hz camera frame)
-      
-      timeToCam = millis() + 20;
+      if(abs(val) > 10)
+      {
+         set_setpoint(get_setpoint() + k*val); //(val * 50 since 50Hz camera frame)
+      }
+      timeToCam = millis() + 50;
     }
   }
 
