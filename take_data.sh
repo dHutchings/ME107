@@ -19,12 +19,16 @@ xterm -e minicom -C ./data/$var/tom.csv -b 57600 -D /dev/ttyUSB0 &
 xterm -e minicom -C ./data/$var/jerry.csv -b 57600 -D /dev/ttyUSB1 &
 #echo helloWorld
 
+
 python ./python/radio_control.py
 
+
+
+sudo killall xterm
 mv timestamps.csv ./data/$var/timestamps.csv
 
 python ./python/merge_datalogs.py ./data/$var/timestamps.csv ./data/$var/tom.csv ./data/$var/jerry.csv ./data/$var/data.csv
 
-sudo killall xterm
+
 
 #python ./python/Foo.bar.py ./data/$var/tom.csv ./data/$var/jerry.csv ./data/$var/tim.csv

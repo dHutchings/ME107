@@ -29,7 +29,7 @@ long timeToEncoder = 0;
 long timeToCam = 0;
 float k = .01;  //a geometry constant for the track distances - will tune later.
 
-boolean isTom = false;
+boolean isTom = true;
 boolean system_enabled = false;
 
 //Define Variables we'll be connecting to
@@ -90,7 +90,7 @@ void loop()
     {
       int motorSpeed = compute_velocity_pid(get_velocity() );
       setMotorSpeed(pwm()+motorSpeed);  // full-speed forward
-      timeToEval = millis()+50;
+      timeToEval = millis()+20;
       //print_velocity();
     
     }

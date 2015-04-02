@@ -119,7 +119,7 @@ print('Starting Test')
 
 set_pid(tom)
 set_pid(jerry)
-camera_PID(.3,.02,0.0)
+camera_PID(2,.4,0)
 originalTime = time.time()
 get_position_both()
 time.sleep(.1)
