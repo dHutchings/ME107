@@ -35,15 +35,8 @@ time_stamps = open('timestamps.csv','w')
 @atexit.register
 def stop_motor():
     print('Ending test.')
-    tom.write('s') #set speed to...
-    jerry.write('s')
-    time.sleep(0.1)
-    tom.write('0.0') #speed is zero.
-    jerry.write('0.0')
-    tom.write('x')
-    jerry.write('x')
-    turn_pid_off(tom)
-    time.sleep(1)
+    system_disable()
+    time.sleep(4)
 
 def current_time_milli():
     return int(round(time.time() * 1000))
@@ -83,7 +76,7 @@ def drive_print(port,tim,speed):
     timeToEnd = current_time_milli() + (1000*tim)
     while current_time_milli() < timeToEnd:
         get_position_both()
-        time.sleep(.05) #at 20 Hz.
+        time.sleep(0.05) #at 10 Hz.
 
 def drive_print_both(tim,speed):
     tom.write('s')
@@ -97,18 +90,40 @@ def drive_print_both(tim,speed):
     timeToEnd = current_time_milli() + (1000*tim)
     while current_time_milli() < timeToEnd:
         get_position_both()
-        time.sleep(.05) #at 20 Hz.
+        time.sleep(.050) #at 20 Hz.
 
 def get_position_both():
 	time_stamps.write(str( round(time.time() - originalTime,3)) + '\n')
 	tom.write('l')
 	jerry.write('l')
 
+def system_enable():
+    tom.write('y')
+    jerry.write('y')
+
+def system_disable():
+    tom.write('n')
+    jerry.write('n')
+
+def camera_PID(kp,ki,kd):
+    tom.write('k')
+    time.sleep(0.1)
+    tom.write(str(kp))
+    time.sleep(1.5)
+    tom.write(str(ki))
+    time.sleep(1.5)
+    tom.write(str(kd))
+    time.sleep(1.5)
 
 print('Starting Test')
+
 set_pid(tom)
 set_pid(jerry)
+camera_PID(.3,.02,0.0)
 originalTime = time.time()
 get_position_both()
+time.sleep(.1)
+system_enable()
 drive_print(jerry,5,'300.0')
+
 

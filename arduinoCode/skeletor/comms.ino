@@ -50,7 +50,7 @@ void parse_input()
          delay(1);
        }
        float set = Serial.parseFloat();
-       set_setpoint(set);
+       set_setpoint_velocity(set);
     }
     else if(msg == 108) //small l
     {
@@ -61,17 +61,50 @@ void parse_input()
     {
        Serial.println(xPos());
     }
-    else if(msg == 107) //small k, change camera proportional
+    else if(msg == 107) //small k, change camera PID consants
     {
-       Serial.println("Awaiting one float, for the camera p constant");
+       Serial.println("Awaiting three float, for the camera PID constant");
+       Serial.println("kp?");
        while(Serial.available() == 0)
        {
          delay(1);
        }
-       k = Serial.parseFloat();
-       Serial.println(k);
+       double kp = Serial.parseFloat();
+       Serial.println("ki?");
+       while(Serial.available() == 0)
+       {
+         delay(1);
+       }
+       double ki = Serial.parseFloat();
+       Serial.println("kd?");
+       while(Serial.available() == 0)
+       {
+         delay(1);
+       }
+       double kd = Serial.parseFloat();
+       Serial.println("Constants are");
+       
+       Serial.print("kp = ");
+       Serial.println(kp); 
+       
+       Serial.print("ki = ");
+       Serial.println(ki); 
+       
+       Serial.print("kd = ");
+       Serial.println(kd); 
+       
+       set_camera_constants(kp,ki,kd);  
     }
-
+    else if(msg == 121) //small y, system enable
+    {
+      Serial.println("Start!");
+      system_enabled = true;
+    }
+    else if(msg == 110) //small n, system disable
+    {
+      Serial.println("Stop!");
+      system_enabled = false;
+    }
 
   }
   

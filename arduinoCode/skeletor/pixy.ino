@@ -3,7 +3,7 @@
 
 PixyI2C pixy(0x55); // You can set the I2C address through PixyI2C object 
 
-int oldLoc;
+int oldLoc = 160;
 
 void pixy_setup()
 {

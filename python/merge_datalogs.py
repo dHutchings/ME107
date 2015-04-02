@@ -4,7 +4,7 @@ import sys, getopt
 def merge_datalogs(tom, jerry, time):
     
     tom_sant = sanitize_data(tom)
-    print(tom_sant)
+#    print(tom_sant)
     #read each list item by item.  Try to convert to int.  if it doesn't, advance that one by 1.
 #    for i in range(1,len(tom)):
 #        if is_num(tom(i)) and is_num(jerry(i)):
@@ -40,7 +40,6 @@ def main(argv):
     tom = args[1];
     jerry = args[2];
     output = args[3];
-    #file_out = merge_datalogs(tom, jerry, time, r)
 
 
     tom_sant = sanitize_data(to_list(tom))

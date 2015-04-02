@@ -1,3 +1,8 @@
+#include <PID_v1.h>
+
+
+
+
 
 
 /* Sekepton Code for Tom and Jerry
@@ -24,7 +29,16 @@ long timeToEncoder = 0;
 long timeToCam = 0;
 float k = .01;  //a geometry constant for the track distances - will tune later.
 
-boolean isTom = true;
+boolean isTom = false;
+boolean system_enabled = false;
+
+//Define Variables we'll be connecting to
+double Setpoint_camera, Input_camera, Output_camera;
+//Specify the links and initial tuning parameters
+PID camera_pid(&Input_camera, &Output_camera, &Setpoint_camera,0,0,0, DIRECT);
+
+//best setpoitns right now seem to be 1, .01, 0
+
 
 void setup() {
   setup_serial();
@@ -33,6 +47,7 @@ void setup() {
   {  
     Serial.println("Starting Pixy...");
     pixy_setup();
+    setup_camera_control();
     Serial.println("Pixy Started");
   } 
   
@@ -57,42 +72,80 @@ void setup() {
 
 void loop() 
 {
-  
   parse_input();
   
-  if( millis() > timeToEncoder)  //only update encoder at 100Hz
+  if(system_enabled)
   {
-    update_encoder();
-    timeToEncoder = millis() + 10;
-    //print_position();
-  }
 
-
-  if( millis() > timeToEval )  //20Hz compute.
-  {
-    int motorSpeed = compute_pid(get_velocity() );
-    //Serial.println(motorSpeed);
-    setMotorSpeed(pwm()+motorSpeed);  // full-speed forward
-    timeToEval = millis()+50;
-    //print_velocity();
-  
-  }
-
-  if(isTom)
-  {
-    if(millis() > timeToCam)
+    
+    if( millis() > timeToEncoder)  //only update encoder at 100Hz
     {
-      int val = 155 - xPos();
-      
-      if(abs(val) > 10)
+      update_encoder();
+      timeToEncoder = millis() + 5;
+      //print_position();
+    }
+  
+  
+    if( millis() > timeToEval )  //20Hz compute.
+    {
+      int motorSpeed = compute_velocity_pid(get_velocity() );
+      setMotorSpeed(pwm()+motorSpeed);  // full-speed forward
+      timeToEval = millis()+50;
+      //print_velocity();
+    
+    }
+  
+    if(isTom)
+    {
+      if(millis() > timeToCam)
       {
-         set_setpoint(get_setpoint() + k*val); //(val * 50 since 50Hz camera frame)
+        int result = compute_camera_pid(xPos());
+        set_setpoint_velocity(result); //(val * 50 since 50Hz camera frame)
+        
+        timeToCam = millis() + 50;
       }
-      timeToCam = millis() + 50;
     }
   }
-
+  else
+  {
+    set_setpoint_velocity(0);
+    setMotorSpeed(0);
+     
+  }
+  
 }
 
 
 
+
+void setup_camera_control()
+{
+   camera_pid.SetOutputLimits(-1000,1000);
+   camera_pid.SetMode(AUTOMATIC);
+   
+   
+   camera_pid.SetSampleTime(50); 
+   
+  //initialize the variables we're linked to
+  Input_camera = 160;  //Input_camera is Zero, starting at the middle (presumably)
+  Setpoint_camera = 160;  //Setpoint_camera is zero, since I want to be at the middle of the camrea frame.
+
+  set_constants(0,0.0,0);
+}
+
+void set_camera_constants(double p, double i, double d)
+{
+   camera_pid.SetTunings(p,i,d); 
+  
+}
+
+int compute_camera_pid(int inp)
+{
+  
+  
+  Input_camera = (double) inp;
+  camera_pid.Compute();
+  
+
+  return Output_camera;
+}
